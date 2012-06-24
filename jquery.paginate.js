@@ -27,15 +27,15 @@
 		// Merge options into settings object
 		var settings = $.extend({
 			controls: '#pagination',
-			controlNext: $('<span class="next"><a href="javascript:void(0);">Next</a></span>'),
-			controlFirst: $('<span class="first"><a href="javascript:void(0);">First</a></span>'),
-			controlPrev: $('<span class="prev"><a href="javascript:void(0);">Previous</a></span>'),
-			controlLast: $('<span class="last"><a href="javascript:void(0);">Last</a></span>'),
+			controlNext: $('<span class="next"><a href="javascript:void(0);">Next &rsaquo;</a></span>'),
+			controlFirst: $('<span class="first"><a href="javascript:void(0);">&laquo; First</a></span>'),
+			controlPrev: $('<span class="prev"><a href="javascript:void(0);">&lsaquo; Previous</a></span>'),
+			controlLast: $('<span class="last"><a href="javascript:void(0);">Last &raquo;</a></span>'),
 			controlPage: $('<span class="page"><a href="javascript:void(0);"></a></span>'),
 			items: null,
 			itemsPerPage: 10,
-			itemLimits: [10, 25, 50, null],
-			itemLimitControl: $('<span class=""><label for="">Select something:</label> <select name="" id=""></select></span>'),
+			itemsPerPageOptions: [5, 10, 15, 25, 50, 'Show All'],
+			controlOptions: $('<span class=""><label for="item_control">Select something:</label> <select name="" id="item_control"></select></span>'),
 			currentPage: 0,
 			_goFirst: function(P) {
 				if (P.currentPage !== 0) {
@@ -91,16 +91,21 @@
 				return P;
 			},
 			_reBuild: function(P) {
-				P = settings._build(P);
+				P = settings._buildPages(P);
 				P = settings._buildStyles(P);
 				return P;
 			},
-			_build: function(P) {
+			_buildPages: function(P) {
+				P.numPages = Math.ceil( P.numItems / P.itemsPerPage );
+				P.lastPage = P.numPages > 0 ? P.numPages - 1 : null;
+
+				P.pages = [];
+
 				// Loop through each item
 				$(P.items).each(function(index, item) {
 					// Determine what page this item is on
 					var page =  Math.floor( index / P.itemsPerPage );
-
+//console.log(page);
 					// If this page does not have any items defined yet
 					if ( ! P.pages[page] ) {
 						P.pages[page] = [];
@@ -112,7 +117,7 @@
 
 				// Hide all items
 				$(P.items).hide();
-
+//console.log(P, P.currentPage);
 				// Get all items visible on this page
 				var currentItems = P.pages[ P.currentPage ];
 
@@ -143,10 +148,49 @@
 				return P;
 			},
 			_buildControls: function(P) {
+
+				// Items per page control
+				var options = settings.controlOptions.clone();
+
+				if (settings.itemsPerPageOptions.length > 0) {
+					for (var i = 0; i < settings.itemsPerPageOptions.length; i++) {
+						var limit = settings.itemsPerPageOptions[i];
+						var option = $('<option />')
+							.attr('value', typeof limit ==='number' ? limit : null)
+							.text(limit);
+
+						if (typeof limit === 'string' || (typeof limit === 'number' && limit <= P.items.length) ) {
+
+							if ( P.itemsPerPage == limit || ( typeof limit === 'string' && P.itemsPerPage === null ) ) {
+
+								$(option).attr('selected', true);
+							}
+							if ( options.is('select') ) {
+								$(options).append(option);
+							}
+							else {
+								$(options).find('select').append(option);
+							}
+						}
+					}
+				}
+
+				// Items per page
+				options.change(function(e) {
+					P.itemsPerPage = $(this).is('select') ? $(this).val() : $(this).find('select').val();
+					var itemPageFirst = P.pages[ P.currentPage ][0];
+
+					P.currentPage = Math.floor( (itemPageFirst + 1) / P.itemsPerPage );
+
+					P = settings._buildPages(P);
+					P = settings._buildStyles(P);
+					P = settings._buildControls(P);
+				});
+
 				var pages = $();
 
 				for (var i = 0; i < P.numPages; i++) {
-					var page = settings.controlPage.clone();
+					var page = settings.controlPage.clone(false, false);
 					
 					if ( page.attr('href') ) {
 						page.attr('href', '#' + ( i + 1) );
@@ -158,17 +202,42 @@
 					pages = pages.add(page);
 				}
 
-				//console.log(P);
+				pages.click(function(e) {
+					e.preventDefault();
+					var page = parseInt( $(e.target).attr('href').replace('#', '') ) - 1;
+					P = settings._goPage(P, page);
+				});
 
 				P.controls = {
-					first: settings.controlFirst,
-					prev: settings.controlPrev,
+					options: options,
+					first: settings.controlFirst.clone(false, false),
+					prev: settings.controlPrev.clone(false, false),
 					page: pages,
-					next: settings.controlNext,
-					last: settings.controlLast
+					next: settings.controlNext.clone(false, false),
+					last: settings.controlLast.clone(false, false)
 				}
 
-				$( settings.controls ).append(P.controls.first, P.controls.prev, P.controls.page, P.controls.next, P.controls.last);
+				// First
+				P.controls.first.click(function(e) {
+					P = settings._goFirst(P);
+				});
+
+				// Previous
+				P.controls.prev.click(function(e) {
+					P = settings._goPrev(P);
+				});
+
+				// Next
+				P.controls.next.click(function(e) {
+					P = settings._goNext(P);
+				});
+
+				// Last
+				P.controls.last.click(function(e) {
+					P = settings._goLast(P);
+				});
+
+				$( settings.controls ).empty().append(options, P.controls.first, P.controls.prev, P.controls.page, P.controls.next, P.controls.last);
 
 				P = settings._buildStyles(P);
 				return P;
@@ -179,55 +248,28 @@
 
 			var items = settings.items === null ? $(this).children() : $(this).find( settings.items );
 			var numItems = $(items).length;
-			var numPages = Math.ceil( numItems / settings.itemsPerPage );
 
 			var P = {
 				items: items,
 				itemsPerPage: settings.itemsPerPage,
 				numItems: numItems,
-				numPages: numPages,
+				numPages: null,
 				pages: [],
 				firstPage: 0,
-				lastPage: numPages - 1,
+				lastPage: null,
 				nextPage: 1,
 				prevPage: null,
 				currentPage: settings.currentPage,
 				controls: null
 			}
 
-			// Build pagination
-			P = settings._build(P);
+			// Build pages
+			P = settings._buildPages(P);
 
 			// Build controls
 			P = settings._buildControls(P);
 
-			// First
-			P.controls.first.click(function(e) {
-				P = settings._goFirst(P);
-			});
-
-			// Previous
-			P.controls.prev.click(function(e) {
-				P = settings._goPrev(P);
-			});
-
-			// Page
-			P.controls.page.click(function(e) {
-				var page = parseInt( $(e.target).attr('href').replace('#', '') ) - 1;
-				P = settings._goPage(P, page);
-			});
-
-			// Next
-			P.controls.next.click(function(e) {
-				P = settings._goNext(P);
-			});
-
-			// Last
-			P.controls.last.click(function(e) {
-				P = settings._goLast(P);
-			});
-
-			console.log(P);
+			//console.log(P);
 		});
 	}
 
