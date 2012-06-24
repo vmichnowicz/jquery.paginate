@@ -35,6 +35,7 @@
 			items: null,
 			itemsPerPage: 10,
 			itemLimits: [10, 25, 50, null],
+			itemLimitControl: $('<span class=""><label for="">Select something:</label> <select name="" id=""></select></span>'),
 			currentPage: 0,
 			_goFirst: function(P) {
 				if (P.currentPage !== 0) {
