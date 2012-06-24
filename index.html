@@ -1,0 +1,182 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+
+	<!-- Meta -->
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+	<!-- Page Title -->
+	<title>jQuery Paginate</title>
+
+	<!-- jQuery -->
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+
+	<!-- jQuery Form Validate -->
+	<script type="text/javascript" src="jquery.paginate.js"></script>
+	
+	<!-- JavaScript -->
+	<script type="text/javascript">
+		$(document).ready(function() {
+
+			// Paginate table rows
+			$('table tbody').paginate({
+				controls: $('#paginate'),
+				itemsPerPage: 5
+			});
+		});
+	</script>
+
+	<style type="text/css">
+		html {
+			font: 12px/16px "Tahoma", "Verdana", "Arial", sans-serif;
+			color: #797979;
+			background-color: #fff;
+		}
+		h2 {
+			font: normal 18px/24px "DejaVu Sans", "Myriad Pro", sans-serif;
+			color: #545454;
+			margin: 15px 0px;
+			padding: 0px;
+		}
+		h2 a {
+			float: right;
+			font: 12px/20px "Tahoma", "Verdana", "Arial", sans-serif;
+			color: #b9b9b9;
+			text-transform: uppercase;
+			text-decoration: none;
+		}
+		pre {
+			display: none;
+			margin: 10px 0px;
+			font: 11px/18px "DejaVu Sans Mono", monospace;
+			color: #fff;
+			background-color: #3e3e3e;
+			padding: 10px;
+			border: 1px solid #313131;
+		}
+		a {
+			color: blue;
+		}
+		#paginate a {
+			padding: 0px 5px;
+		}
+		#paginate .current {
+			color: #fff;
+			background-color: blue;
+			cursor: default;
+		}
+		#paginate .disabled a {
+			color: #999;
+			cursor: default;
+		}
+	</style>
+
+</head>
+
+<body>
+
+<div>
+
+	<table>
+		<thead>
+			<tr>
+				<th>Name</th>
+				<th>Age</th>
+				<th>Favorite Color</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>Bob</td>
+				<td>34</td>
+				<td>Red</td>
+			</tr>
+			<tr>
+				<td>Sam</td>
+				<td>32</td>
+				<td>Pink</td>
+			</tr>
+			<tr>
+				<td>Rick</td>
+				<td>38</td>
+				<td>Salmon</td>
+			</tr>
+			<tr>
+				<td>Victor</td>
+				<td>25</td>
+				<td>Blue</td>
+			</tr>
+			<tr>
+				<td>Sharon</td>
+				<td>25</td>
+				<td>Orange</td>
+			</tr>
+			<tr>
+				<td>Matt</td>
+				<td>37</td>
+				<td>Green</td>
+			</tr>
+			<tr>
+				<td>Amanda</td>
+				<td>39</td>
+				<td>Teal</td>
+			</tr>
+			<tr>
+				<td>Pam</td>
+				<td>39</td>
+				<td>White</td>
+			</tr>
+			<tr>
+				<td>Harold</td>
+				<td>49</td>
+				<td>Gray</td>
+			</tr>
+			<tr>
+				<td>Ken</td>
+				<td>49</td>
+				<td>Yellow</td>
+			</tr>
+			<tr>
+				<td>Alex</td>
+				<td>74</td>
+				<td>Purple</td>
+			</tr>
+			<tr>
+				<td>Ted</td>
+				<td>23</td>
+				<td>Yellow</td>
+			</tr>
+			<tr>
+				<td>Garry</td>
+				<td>84</td>
+				<td>Black</td>
+			</tr>
+			<tr>
+				<td>Ed</td>
+				<td>57</td>
+				<td>Brown</td>
+			</tr>
+			<tr>
+				<td>Wayne</td>
+				<td>38</td>
+				<td>Blue</td>
+			</tr>
+			<tr>
+				<td>Ben</td>
+				<td>47</td>
+				<td>Silver</td>
+			</tr>
+			<tr>
+				<td>Jane</td>
+				<td>49</td>
+				<td>Gold</td>
+			</tr>
+		</tbody>
+	</table>
+
+	<div id="paginate"></div>
+
+</div>
+
+</body>
+</html>
