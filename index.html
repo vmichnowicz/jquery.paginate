@@ -20,6 +20,7 @@
 
 			// Paginate table rows
 			$('table tbody').paginate({
+				status: $('#status'),
 				controls: $('#paginate'),
 				itemsPerPage: 5
 			});
@@ -201,6 +202,7 @@
 		</tbody>
 	</table>
 
+	<div id="status">Currently viewing row {0} &mdash; {1} of {2}</div>
 	<div id="paginate"></div>
 
 </div>

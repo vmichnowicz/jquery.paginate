@@ -2,28 +2,6 @@
 
 	$.fn.paginate = function(options) {
 
-		/**
-		 * Super simple JavaScript sprintf method
-		 *
-		 * It is by no means perfect, however it will work for our error
-		 * messages. If string contains something like "{1}" then that text
-		 * will be replaced with the second element from our "params" array.
-		 *
-		 * String: "My name is {0} and I like {1}."
-		 * Array: ["Victor", "dinos"]
-		 * Return: "My name is Victor and I like dinos."
-		 *
-		 * @param array		Array of stirngs to replace in target string
-		 * @return object	JavaScript string object
-		 */
-		String.prototype.sprintf = function(params) {
-			var string = this;
-			$.each(params, function(index, param) {
-				string = string.replace('{' + index + '}', param);
-			});
-			return string;
-		}
-
 		// Merge options into settings object
 		var settings = $.extend({
 			controls: '#pagination',
@@ -33,6 +11,7 @@
 			controlLast: $('<span class="last"><a href="javascript:void(0);">Last &raquo;</a></span>'),
 			controlPage: $('<span class="page"><a href="javascript:void(0);"></a></span>'),
 			items: null,
+			status: null,
 			itemsPerPage: 10,
 			itemsPerPageOptions: [5, 10, 15, 25, 50, 'Show All'],
 			controlOptions: $('<span class=""><label for="item_control">Select something:</label> <select name="" id="item_control"></select></span>'),
@@ -44,7 +23,8 @@
 					P.prevPage = null;
 					P.nextPage = P.numPages > 0 ? P.currentPage + 1 : null;
 
-					P = settings._reBuild(P);
+					P = settings._buildPages(P);
+					P = settings._buildStyles(P);
 				}
 
 				return P;
@@ -55,7 +35,8 @@
 					P.currentPage = P.prevPage;
 					P.prevPage = P.currentPage > 0 ? P.currentPage - 1 : null;
 
-					P = settings._reBuild(P);
+					P = settings._buildPages(P);
+					P = settings._buildStyles(P);
 				}
 
 				return P;
@@ -66,7 +47,8 @@
 					P.nextPage = P.numPages === P.currentPage + 1 ? null : P.currentPage + 1;
 					P.prevPage = P.currentPage > 0 ? P.currentPage - 1 : null;
 
-					P = settings._reBuild(P);
+					P = settings._buildPages(P);
+					P = settings._buildStyles(P);
 				}
 				return P;
 			},
@@ -76,7 +58,8 @@
 					P.currentPage = P.nextPage;
 					P.nextPage = P.numPages === P.currentPage + 1 ? null : P.currentPage + 1;
 
-					P = settings._reBuild(P);
+					P = settings._buildPages(P);
+					P = settings._buildStyles(P);
 				}
 				return P;
 			},
@@ -86,13 +69,9 @@
 					P.prevPage = P.currentPage > 0 ? P.currentPage - 1 : null;
 					P.nextPage = null;;
 
-					P = settings._reBuild(P);
+					P = settings._buildPages(P);
+					P = settings._buildStyles(P);
 				}
-				return P;
-			},
-			_reBuild: function(P) {
-				P = settings._buildPages(P);
-				P = settings._buildStyles(P);
 				return P;
 			},
 			_buildPages: function(P) {
@@ -105,7 +84,7 @@
 				$(P.items).each(function(index, item) {
 					// Determine what page this item is on
 					var page =  Math.floor( index / P.itemsPerPage );
-//console.log(page);
+
 					// If this page does not have any items defined yet
 					if ( ! P.pages[page] ) {
 						P.pages[page] = [];
@@ -117,13 +96,27 @@
 
 				// Hide all items
 				$(P.items).hide();
-//console.log(P, P.currentPage);
+
 				// Get all items visible on this page
 				var currentItems = P.pages[ P.currentPage ];
 
 				// Show all items visible on this page
 				for (var i = 0; i < currentItems.length; i++) {
 					$(P.items).eq( currentItems[i] ).show();
+				}
+
+				/**
+				 * Update status text
+				 *
+				 * Update template from something like "Viewing rows {0} - {1}
+				 * of {2}." to "Viewing rows 6 - 10 of 47."
+				 */
+				if (P.statusTemplate) {
+					var statusText = P.statusTemplate; // Get template
+					statusText = statusText.replace('{0}', P.pages[ P.currentPage ][0] + 1); // First item on page
+					statusText = statusText.replace('{1}', P.pages[ P.currentPage ][ P.pages[ P.currentPage ].length - 1 ] + 1); // Last item on page
+					statusText = statusText.replace('{2}', P.numItems); // Total number of items
+					settings.status.text(statusText);
 				}
 
 				return P;
@@ -260,7 +253,8 @@
 				nextPage: 1,
 				prevPage: null,
 				currentPage: settings.currentPage,
-				controls: null
+				controls: null,
+				statusTemplate: settings.status ? settings.status.text() : null
 			}
 
 			// Build pages
