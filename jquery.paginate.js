@@ -12,9 +12,10 @@
 			controlPage: $('<span class="page"><a href="javascript:void(0);"></a></span>'),
 			items: null,
 			status: null,
+			statusTemplate: $('<p>Viewing items <em class="first_page_item">{0}</em> - <em class="last_page_item">{1}</em> of <em class="total_items">{2}</em></p>'),
 			itemsPerPage: 10,
 			itemsPerPageOptions: [5, 10, 15, 25, 50, 'Show All'],
-			controlOptions: $('<span class=""><label for="item_control">Select something:</label> <select name="" id="item_control"></select></span>'),
+			controlOptions: $('<span class="items_per_page"><label for="items_per_page">Items per page:</label> <select name="" id="items_per_page"></select></span>'),
 			currentPage: 0,
 			_goFirst: function(P) {
 				if (P.currentPage !== 0) {
@@ -75,15 +76,21 @@
 				return P;
 			},
 			_buildPages: function(P) {
-				P.numPages = Math.ceil( P.numItems / P.itemsPerPage );
-				P.lastPage = P.numPages > 0 ? P.numPages - 1 : null;
+				P.numPages = P.itemsPerPage === null ? 1 : Math.ceil( P.numItems / P.itemsPerPage );
+				P.prevPage = P.currentPage === 0 ? null : P.currentPage - 1;
+				P.nextPage = ( P.currentPage + 1 ) < P.numPages ? P.currentPage + 1 : null;
+				P.lastPage = P.numPages - 1;
 
 				P.pages = [];
 
 				// Loop through each item
 				$(P.items).each(function(index, item) {
-					// Determine what page this item is on
-					var page =  Math.floor( index / P.itemsPerPage );
+					/**
+					 * Determine what page this item is on
+					 * 
+					 * If items per page is null show all items on first page
+					 */
+					var page =  P.itemsPerPage === null ? 0 : Math.floor( index / P.itemsPerPage );
 
 					// If this page does not have any items defined yet
 					if ( ! P.pages[page] ) {
@@ -111,12 +118,14 @@
 				 * Update template from something like "Viewing rows {0} - {1}
 				 * of {2}." to "Viewing rows 6 - 10 of 47."
 				 */
-				if (P.statusTemplate) {
-					var statusText = P.statusTemplate; // Get template
+				if (settings.status && P.statusTemplate) {
+					var statusText = settings.statusTemplate.html(); // Get template
 					statusText = statusText.replace('{0}', P.pages[ P.currentPage ][0] + 1); // First item on page
 					statusText = statusText.replace('{1}', P.pages[ P.currentPage ][ P.pages[ P.currentPage ].length - 1 ] + 1); // Last item on page
 					statusText = statusText.replace('{2}', P.numItems); // Total number of items
-					settings.status.text(statusText);
+					P.statusTemplate = settings.statusTemplate.clone().html(statusText);
+
+					settings.status.empty().append(P.statusTemplate)
 				}
 
 				return P;
@@ -149,7 +158,7 @@
 					for (var i = 0; i < settings.itemsPerPageOptions.length; i++) {
 						var limit = settings.itemsPerPageOptions[i];
 						var option = $('<option />')
-							.attr('value', typeof limit ==='number' ? limit : null)
+							.attr('value', typeof limit ==='number' ? limit : '')
 							.text(limit);
 
 						if (typeof limit === 'string' || (typeof limit === 'number' && limit <= P.items.length) ) {
@@ -171,13 +180,17 @@
 				// Items per page
 				options.change(function(e) {
 					P.itemsPerPage = $(this).is('select') ? $(this).val() : $(this).find('select').val();
+					P.itemsPerPage = P.itemsPerPage == '' ? null : P.itemsPerPage;
+
 					var itemPageFirst = P.pages[ P.currentPage ][0];
 
-					P.currentPage = Math.floor( (itemPageFirst + 1) / P.itemsPerPage );
+					P.currentPage = P.itemsPerPage == null ? 0 : Math.floor( (itemPageFirst + 1) / P.itemsPerPage );
+					
 
 					P = settings._buildPages(P);
 					P = settings._buildStyles(P);
 					P = settings._buildControls(P);
+					
 				});
 
 				var pages = $();
@@ -254,14 +267,14 @@
 				prevPage: null,
 				currentPage: settings.currentPage,
 				controls: null,
-				statusTemplate: settings.status ? settings.status.text() : null
+				statusTemplate: settings.statusTemplate ? settings.statusTemplate : null
 			}
 
 			// Build pages
 			P = settings._buildPages(P);
 
 			// Build controls
-			P = settings._buildControls(P);
+			P = settings._buildControls(P);			
 
 			//console.log(P);
 		});

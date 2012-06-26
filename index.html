@@ -58,6 +58,48 @@
 		a {
 			color: blue;
 		}
+		body > div {
+			width: 50%;
+			margin: 0px auto;
+		}
+		table {
+			width: 100%;
+		}
+		table {
+			border-collapse: collapse;
+		}
+		table td {
+			text-align: center;
+			padding: 3px 5px;
+			border: 1px solid #eee;
+			margin: 0px;
+		}
+		table tr:hover td {
+			background-color: #fffef4;
+		}
+		#status, #paginate {
+			display: inline-block;
+		}
+		#status {
+			margin: 10px 0px;
+			color: #999;
+			float: left;
+		}
+		#status p {
+			margin: 0px;
+		}
+		#status em {
+			font-size: 11px;
+			color: #777;
+			font-style: normal;
+		}
+		#paginate {
+			float: right;
+			margin: 10px 0px;
+		}
+		#paginate .items_per_page label {
+			color: #999;
+		}
 		#paginate a {
 			margin: 0px 5px;
 			background-color: #00a1ff;
@@ -202,7 +244,7 @@
 		</tbody>
 	</table>
 
-	<div id="status">Currently viewing row {0} &mdash; {1} of {2}</div>
+	<div id="status"></div>
 	<div id="paginate"></div>
 
 </div>
