@@ -4,7 +4,7 @@
 
 		// Merge options into settings object
 		var settings = $.extend({
-			controls: '#pagination',
+			controls: $('#pagination'),
 			controlNext: $('<span class="next"><a href="javascript:void(0);">Next &rsaquo;</a></span>'),
 			controlFirst: $('<span class="first"><a href="javascript:void(0);">&laquo; First</a></span>'),
 			controlPrev: $('<span class="prev"><a href="javascript:void(0);">&lsaquo; Previous</a></span>'),
@@ -17,6 +17,13 @@
 			itemsPerPageOptions: [5, 10, 15, 25, 50, 'Show All'],
 			controlOptions: $('<span class="items_per_page"><label for="items_per_page">Items per page:</label> <select name="" id="items_per_page"></select></span>'),
 			currentPage: 0,
+			/**
+			 * Go to first page
+			 * 
+			 * @access protected
+			 * @param object
+			 * @return object
+			 */
 			_goFirst: function(P) {
 				if (P.currentPage !== 0) {
 
@@ -30,6 +37,13 @@
 
 				return P;
 			},
+			/**
+			 * Go to previous page
+			 *
+			 * @access protected
+			 * @param object
+			 * @return object
+			 */
 			_goPrev: function(P) {
 				if (P.prevPage !== null) {
 					P.nextPage = P.currentPage;
@@ -42,6 +56,14 @@
 
 				return P;
 			},
+			/**
+			 * Go to a particular page
+			 *
+			 * @access protected
+			 * @param object
+			 * @param int
+			 * @return object
+			 */
 			_goPage: function(P, page) {
 				if (P.pages[ page ]) {
 					P.currentPage = page;
@@ -53,6 +75,13 @@
 				}
 				return P;
 			},
+			/**
+			 * Go to next page
+			 *
+			 * @access protected
+			 * @param object
+			 * @return object
+			 */
 			_goNext: function(P) {
 				if (P.nextPage !== null) {
 					P.prevPage = P.currentPage;
@@ -64,6 +93,13 @@
 				}
 				return P;
 			},
+			/**
+			 * Go to last page
+			 *
+			 * @access protected
+			 * @param object
+			 * @return object
+			 */
 			_goLast: function(P) {
 				if ( P.currentPage !== P.numPages - 1) {
 					P.currentPage = P.numPages - 1;
@@ -75,6 +111,13 @@
 				}
 				return P;
 			},
+			/**
+			 * Build pages
+			 *
+			 * @access protected
+			 * @param object
+			 * @return object
+			 */
 			_buildPages: function(P) {
 				P.numPages = P.itemsPerPage === null ? 1 : Math.ceil( P.numItems / P.itemsPerPage );
 				P.prevPage = P.currentPage === 0 ? null : P.currentPage - 1;
@@ -125,11 +168,18 @@
 					statusText = statusText.replace('{2}', P.numItems); // Total number of items
 					P.statusTemplate = settings.statusTemplate.clone().html(statusText);
 
-					settings.status.empty().append(P.statusTemplate)
+					settings.status.html(P.statusTemplate);
 				}
 
 				return P;
 			},
+			/**
+			 * Build CSS styles
+			 *
+			 * @access protected
+			 * @param object
+			 * @return object
+			 */
 			_buildStyles: function(P) {
 				if (P.controls) {
 					for (i in P.controls) {
@@ -149,12 +199,28 @@
 
 				return P;
 			},
+			/**
+			 * Build controls
+			 *
+			 * Controls include the first, previous, next, last, and page
+			 * buttons. It also includes the items-per-page select dropdown.
+			 *
+			 * @access protected
+			 * @param object
+			 * @return object
+			 */
 			_buildControls: function(P) {
 
-				// Items per page control
-				var options = settings.controlOptions.clone();
+				// Items per page control (default to empty jQuery object)
+				var options = $();
 
-				if (settings.itemsPerPageOptions.length > 0) {
+				// If user has custom items-per-page options
+				if (settings.itemsPerPageOptions !== null && settings.itemsPerPageOptions.length > 0) {
+
+					// Set options to user-provided jQuery object
+					options = settings.controlOptions.clone();
+
+					// Loop through each custom items-per-page option
 					for (var i = 0; i < settings.itemsPerPageOptions.length; i++) {
 						var limit = settings.itemsPerPageOptions[i];
 						var option = $('<option />')
@@ -175,28 +241,39 @@
 							}
 						}
 					}
+
+					// Items per page change
+					options.change(function(e) {
+						P.itemsPerPage = $(this).is('select') ? $(this).val() : $(this).find('select').val();
+						P.itemsPerPage = P.itemsPerPage == '' ? null : parseInt( P.itemsPerPage ); // Set to null if items per page is blank, else convert to integer
+
+						var itemPageFirst = P.pages[ P.currentPage ][0]; // Get the first item on the current page
+
+						/**
+						 * Our *new* current page will be sure to include the
+						 * item that was the first on the *old* current page.
+						 * This will make it so when a user changes the items
+						 * per page option he is viewing a similar set of data
+						 * as he was viewing before.
+						 *
+						 * For example, if our user was viewing 5 items per page
+						 * and was looking at items 6 - 10 and then wanted to
+						 * view 10 items per page, he would then be looking at
+						 * items 6 - 15.
+						 */
+						P.currentPage = P.itemsPerPage == null ? 0 : Math.floor( (itemPageFirst + 1) / P.itemsPerPage );
+
+						P = settings._buildPages(P);
+						P = settings._buildStyles(P);
+						P = settings._buildControls(P);
+					});
 				}
-
-				// Items per page
-				options.change(function(e) {
-					P.itemsPerPage = $(this).is('select') ? $(this).val() : $(this).find('select').val();
-					P.itemsPerPage = P.itemsPerPage == '' ? null : P.itemsPerPage;
-
-					var itemPageFirst = P.pages[ P.currentPage ][0];
-
-					P.currentPage = P.itemsPerPage == null ? 0 : Math.floor( (itemPageFirst + 1) / P.itemsPerPage );
-					
-
-					P = settings._buildPages(P);
-					P = settings._buildStyles(P);
-					P = settings._buildControls(P);
-					
-				});
 
 				var pages = $();
 
+				// Loop through all of our pages
 				for (var i = 0; i < P.numPages; i++) {
-					var page = settings.controlPage.clone(false, false);
+					var page = settings.controlPage.clone();
 					
 					if ( page.attr('href') ) {
 						page.attr('href', '#' + ( i + 1) );
@@ -208,6 +285,7 @@
 					pages = pages.add(page);
 				}
 
+				// Navigate to a particular page on click
 				pages.click(function(e) {
 					e.preventDefault();
 					var page = parseInt( $(e.target).attr('href').replace('#', '') ) - 1;
@@ -223,38 +301,50 @@
 					last: settings.controlLast.clone(false, false)
 				}
 
-				// First
+				// Go to first page on click
 				P.controls.first.click(function(e) {
 					P = settings._goFirst(P);
 				});
 
-				// Previous
+				// Go to previous page on click
 				P.controls.prev.click(function(e) {
 					P = settings._goPrev(P);
 				});
 
-				// Next
+				// Go to next page on click
 				P.controls.next.click(function(e) {
 					P = settings._goNext(P);
 				});
 
-				// Last
+				// Go to last page on click
 				P.controls.last.click(function(e) {
 					P = settings._goLast(P);
 				});
 
-				$( settings.controls ).empty().append(options, P.controls.first, P.controls.prev, P.controls.page, P.controls.next, P.controls.last);
+				// Replace all controls
+				$(settings.controls)
+					.empty()
+					.append(P.controls.options, P.controls.first, P.controls.prev, P.controls.page, P.controls.next, P.controls.last);
 
 				P = settings._buildStyles(P);
+
 				return P;
 			}
 		}, options);
 
+		// Loop through each jQuery object
 		return this.each(function() {
 
+			/**
+			 * Get all items
+			 *
+			 * Default to all children. If a custom jQuery selector was provided
+			 * use that to determine what to paginate.
+			 */
 			var items = settings.items === null ? $(this).children() : $(this).find( settings.items );
 			var numItems = $(items).length;
 
+			// Build main pagination object
 			var P = {
 				items: items,
 				itemsPerPage: settings.itemsPerPage,
@@ -263,7 +353,7 @@
 				pages: [],
 				firstPage: 0,
 				lastPage: null,
-				nextPage: 1,
+				nextPage: null,
 				prevPage: null,
 				currentPage: settings.currentPage,
 				controls: null,
