@@ -4,18 +4,18 @@
 
 		// Merge options into settings object
 		var settings = $.extend({
-			controls: $('#pagination'),
-			controlNext: $('<span class="next"><a href="javascript:void(0);">Next &rsaquo;</a></span>'),
-			controlFirst: $('<span class="first"><a href="javascript:void(0);">&laquo; First</a></span>'),
-			controlPrev: $('<span class="prev"><a href="javascript:void(0);">&lsaquo; Previous</a></span>'),
-			controlLast: $('<span class="last"><a href="javascript:void(0);">Last &raquo;</a></span>'),
-			controlPage: $('<span class="page"><a href="javascript:void(0);"></a></span>'),
+			controls: $('#pagination_controls'),
+			controlNext: $('<a href="javascript:void(0);" class="next">Next &rsaquo;</a>'),
+			controlFirst: $('<a href="javascript:void(0);" class="first">&laquo; First</a>'),
+			controlPrev: $('<a href="javascript:void(0);" class="prev">&lsaquo; Previous</a>'),
+			controlLast: $('<a href="javascript:void(0);" class="last">Last &raquo;</a>'),
+			controlPage: $('<a href="javascript:void(0);" class="page"></a>'),
 			items: null,
-			status: null,
+			status: $('#pagination_status'),
 			statusTemplate: $('<p>Viewing items <em class="first_page_item">{0}</em> - <em class="last_page_item">{1}</em> of <em class="total_items">{2}</em></p>'),
 			itemsPerPage: 10,
 			itemsPerPageOptions: [5, 10, 15, 25, 50, 'Show All'],
-			controlOptions: $('<span class="items_per_page"><label for="items_per_page">Items per page:</label> <select name="" id="items_per_page"></select></span>'),
+			controlOptions: $('<span class="items_per_page"><label for="items_per_page">Items per page:</label> <select name="items_per_page" id="items_per_page"></select></span>'),
 			currentPage: 0,
 			/**
 			 * Go to first page
@@ -181,7 +181,10 @@
 			 * @return object
 			 */
 			_buildStyles: function(P) {
+				console.log(P);
+				// If we have pagination controls
 				if (P.controls) {
+					// Loop through all controls (first, prev, next, last, and page)
 					for (i in P.controls) {
 						P.controls[i].removeClass('disabled');
 						P.controls[i].find('a').removeClass('current');
@@ -194,6 +197,17 @@
 						P.controls.last.addClass('disabled');
 						P.controls.next.addClass('disabled');
 					}
+
+					for (i in P.controls.page) {
+						P.controls.page[i].removeClass('disabled');
+						P.controls.page[i].find('a').removeClass('current');
+					}
+
+
+					// @todo fix this method
+
+
+
 					P.controls.page.find('a[href*="' + ( P.currentPage + 1 ) + '"]').addClass('current');
 				}
 
@@ -275,8 +289,8 @@
 				for (var i = 0; i < P.numPages; i++) {
 					var page = settings.controlPage.clone();
 					
-					if ( page.attr('href') ) {
-						page.attr('href', '#' + ( i + 1) );
+					if ( page.is('a') ) {
+						page.attr('href', '#' + ( i + 1) ).text( i + 1 );
 					}
 					else {
 						page.find('a').attr('href', '#' + ( i + 1) ).text( i + 1 );
