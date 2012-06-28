@@ -8,8 +8,8 @@
 	},
 	"licenses": [
 		{
-		"type": "CC BY-NC 3.0",
-		"url": "http://creativecommons.org/licenses/by-nc/3.0/"
+		"type": "MIT",
+		"url": "http://www.opensource.org/licenses/mit-license.php"
 		}
 	],
 	"dependencies": {
@@ -17,9 +17,8 @@
 	},
 	"description": "",
 	"keywords": [
-		"form",
-		"validation",
-		"validate"
+		"paginate",
+		"pagination"
 	],
 	"homepage": "https://github.com/vmichnowicz/jquery.paginate",
 	"maintainers": [

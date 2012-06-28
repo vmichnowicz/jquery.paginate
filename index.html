@@ -59,14 +59,27 @@
 			color: blue;
 		}
 		body > div {
-			width: 50%;
+			width: 960px;
 			margin: 0px auto;
 		}
 		table {
 			width: 100%;
-		}
-		table {
 			border-collapse: collapse;
+		}
+		table th.id {
+			width: 10%;
+		}
+		table th.name {
+			width: 20%;
+		}
+		table th.age {
+			width: 10%;
+		}
+		table th.color {
+			width: 20%;
+		}
+		table th.browser {
+			width: 40%;
 		}
 		table td {
 			text-align: center;
@@ -132,10 +145,11 @@
 	<table>
 		<thead>
 			<tr>
-				<th>ID</th>
-				<th>Name</th>
-				<th>Age</th>
-				<th>Favorite Color</th>
+				<th class="id">ID</th>
+				<th class="name">Name</th>
+				<th class="age">Age</th>
+				<th class="color">Favorite Color</th>
+				<th class="browser">Favorite Web Browser</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -144,102 +158,238 @@
 				<td>Bob</td>
 				<td>34</td>
 				<td>Red</td>
+				<td>Chrome</td>
 			</tr>
 			<tr>
 				<td>2</td>
 				<td>Sam</td>
 				<td>32</td>
 				<td>Pink</td>
+				<td>Opera</td>
 			</tr>
 			<tr>
 				<td>3</td>
 				<td>Rick</td>
 				<td>38</td>
 				<td>Salmon</td>
+				<td>Firefox</td>
 			</tr>
 			<tr>
 				<td>4</td>
 				<td>Victor</td>
 				<td>25</td>
 				<td>Blue</td>
+				<td>Internet Explorer</td>
 			</tr>
 			<tr>
 				<td>5</td>
 				<td>Sharon</td>
 				<td>25</td>
 				<td>Orange</td>
+				<td>Safari</td>
 			</tr>
 			<tr>
 				<td>6</td>
 				<td>Matt</td>
 				<td>37</td>
 				<td>Green</td>
+				<td>Netscape</td>
 			</tr>
 			<tr>
 				<td>7</td>
 				<td>Amanda</td>
 				<td>39</td>
 				<td>Teal</td>
+				<td>Konqueror</td>
 			</tr>
 			<tr>
 				<td>8</td>
 				<td>Pam</td>
 				<td>39</td>
 				<td>White</td>
+				<td>Camino</td>
 			</tr>
 			<tr>
 				<td>9</td>
 				<td>Harold</td>
 				<td>49</td>
 				<td>Gray</td>
+				<td>Lynx</td>
 			</tr>
 			<tr>
 				<td>10</td>
 				<td>Ken</td>
 				<td>49</td>
 				<td>Yellow</td>
+				<td>Firefox</td>
 			</tr>
 			<tr>
 				<td>11</td>
 				<td>Alex</td>
 				<td>74</td>
 				<td>Purple</td>
+				<td>Chrome</td>
 			</tr>
 			<tr>
 				<td>12</td>
 				<td>Ted</td>
 				<td>23</td>
 				<td>Yellow</td>
+				<td>Opera</td>
 			</tr>
 			<tr>
 				<td>13</td>
 				<td>Garry</td>
 				<td>84</td>
 				<td>Black</td>
+				<td>Internet Explorer</td>
 			</tr>
 			<tr>
 				<td>14</td>
 				<td>Ed</td>
 				<td>57</td>
 				<td>Brown</td>
+				<td>Firefox</td>
 			</tr>
 			<tr>
 				<td>15</td>
 				<td>Wayne</td>
 				<td>38</td>
 				<td>Blue</td>
+				<td>Chrome</td>
 			</tr>
 			<tr>
 				<td>16</td>
 				<td>Ben</td>
 				<td>47</td>
 				<td>Silver</td>
+				<td>Chrome</td>
 			</tr>
 			<tr>
 				<td>17</td>
 				<td>Jane</td>
 				<td>49</td>
 				<td>Gold</td>
+				<td>Safari</td>
+			</tr>
+			<tr>
+				<td>18</td>
+				<td>Bob</td>
+				<td>34</td>
+				<td>Red</td>
+				<td>Chrome</td>
+			</tr>
+			<tr>
+				<td>19</td>
+				<td>Sam</td>
+				<td>32</td>
+				<td>Pink</td>
+				<td>Opera</td>
+			</tr>
+			<tr>
+				<td>20</td>
+				<td>Rick</td>
+				<td>38</td>
+				<td>Salmon</td>
+				<td>Firefox</td>
+			</tr>
+			<tr>
+				<td>21</td>
+				<td>Ben</td>
+				<td>25</td>
+				<td>Blue</td>
+				<td>Internet Explorer</td>
+			</tr>
+			<tr>
+				<td>22</td>
+				<td>Troy</td>
+				<td>25</td>
+				<td>Orange</td>
+				<td>Safari</td>
+			</tr>
+			<tr>
+				<td>23</td>
+				<td>Dan</td>
+				<td>37</td>
+				<td>Green</td>
+				<td>Netscape</td>
+			</tr>
+			<tr>
+				<td>24</td>
+				<td>Thomas</td>
+				<td>39</td>
+				<td>Teal</td>
+				<td>Konqueror</td>
+			</tr>
+			<tr>
+				<td>25</td>
+				<td>Marty</td>
+				<td>39</td>
+				<td>White</td>
+				<td>Camino</td>
+			</tr>
+			<tr>
+				<td>26</td>
+				<td>Luis</td>
+				<td>57</td>
+				<td>Brown</td>
+				<td>Firefox</td>
+			</tr>
+			<tr>
+				<td>27</td>
+				<td>Frank</td>
+				<td>38</td>
+				<td>Blue</td>
+				<td>Chrome</td>
+			</tr>
+			<tr>
+				<td>28</td>
+				<td>Newt</td>
+				<td>47</td>
+				<td>Silver</td>
+				<td>Chrome</td>
+			</tr>
+			<tr>
+				<td>29</td>
+				<td>Rick</td>
+				<td>49</td>
+				<td>Gold</td>
+				<td>Safari</td>
+			</tr>
+			<tr>
+				<td>30</td>
+				<td>James</td>
+				<td>49</td>
+				<td>Gray</td>
+				<td>Lynx</td>
+			</tr>
+			<tr>
+				<td>31</td>
+				<td>Jane</td>
+				<td>49</td>
+				<td>Yellow</td>
+				<td>Firefox</td>
+			</tr>
+			<tr>
+				<td>32</td>
+				<td>Fred</td>
+				<td>74</td>
+				<td>Purple</td>
+				<td>Chrome</td>
+			</tr>
+			<tr>
+				<td>33</td>
+				<td>Ron</td>
+				<td>23</td>
+				<td>Yellow</td>
+				<td>Opera</td>
+			</tr>
+			<tr>
+				<td>34</td>
+				<td>Joe</td>
+				<td>84</td>
+				<td>Black</td>
+				<td>Internet Explorer</td>
 			</tr>
 		</tbody>
 	</table>

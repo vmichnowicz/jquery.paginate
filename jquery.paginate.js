@@ -1,5 +1,21 @@
 (function($) {
 
+	/**
+	 * Find an element and include current element in selection
+	 *
+	 * @author Jeoff Wilks
+	 * @url http://stackoverflow.com/a/3742019
+	 */
+	$.fn.findAndSelf = function(selector) {
+		return this.find(selector).add(this.filter(selector))
+	}
+
+	/**
+	 * Paginate
+	 *
+	 * @author Victor Michnowicz
+	 * @url https://github.com/vmichnowicz/jquery.paginate
+	 */
 	$.fn.paginate = function(options) {
 
 		// Merge options into settings object
@@ -17,6 +33,8 @@
 			itemsPerPageOptions: [5, 10, 15, 25, 50, 'Show All'],
 			controlOptions: $('<span class="items_per_page"><label for="items_per_page">Items per page:</label> <select name="items_per_page" id="items_per_page"></select></span>'),
 			currentPage: 0,
+			classDisabled: 'disabled',
+			classCurrent: 'current',
 			/**
 			 * Go to first page
 			 * 
@@ -166,7 +184,7 @@
 					statusText = statusText.replace('{0}', P.pages[ P.currentPage ][0] + 1); // First item on page
 					statusText = statusText.replace('{1}', P.pages[ P.currentPage ][ P.pages[ P.currentPage ].length - 1 ] + 1); // Last item on page
 					statusText = statusText.replace('{2}', P.numItems); // Total number of items
-					P.statusTemplate = settings.statusTemplate.clone().html(statusText);
+					P.statusTemplate = settings.statusTemplate.clone(false).html(statusText);
 
 					settings.status.html(P.statusTemplate);
 				}
@@ -181,34 +199,40 @@
 			 * @return object
 			 */
 			_buildStyles: function(P) {
-				console.log(P);
+
 				// If we have pagination controls
 				if (P.controls) {
-					// Loop through all controls (first, prev, next, last, and page)
-					for (i in P.controls) {
-						P.controls[i].removeClass('disabled');
-						P.controls[i].find('a').removeClass('current');
+					// Loop through all controls ("first", "prev", "next", "last", and "pages")
+					for (control in P.controls) {
+						// If this is a "first", "prev", "next", or "last" control (everything but "pages"
+						if (control !== 'pages') {
+							P.controls[control].removeClass( settings.classDisabled );
+						}
 					}
+
+					// If we are on the first page
 					if (P.currentPage === 0) {
-						P.controls.first.addClass('disabled');
-						P.controls.prev.addClass('disabled');
+						P.controls.first.addClass( settings.classDisabled );
+						P.controls.prev.addClass( settings.classDisabled );
 					}
+
+					// If we are on the last page
 					if (P.currentPage === P.numPages - 1) {
-						P.controls.last.addClass('disabled');
-						P.controls.next.addClass('disabled');
+						P.controls.last.addClass( settings.classDisabled );
+						P.controls.next.addClass( settings.classDisabled );
 					}
 
-					for (i in P.controls.page) {
-						P.controls.page[i].removeClass('disabled');
-						P.controls.page[i].find('a').removeClass('current');
-					}
+					// Loop through all page controls
+					$(P.controls.pages).each(function(index, page) {
 
+						// Remove current class from all page controls
+						$(page).findAndSelf('a').removeClass( settings.classCurrent );
 
-					// @todo fix this method
-
-
-
-					P.controls.page.find('a[href*="' + ( P.currentPage + 1 ) + '"]').addClass('current');
+						// If this is the current page, add current class to page control
+						if (index === P.currentPage) {
+							$(page).findAndSelf('a').addClass( settings.classCurrent );
+						}
+					});
 				}
 
 				return P;
@@ -232,7 +256,7 @@
 				if (settings.itemsPerPageOptions !== null && settings.itemsPerPageOptions.length > 0) {
 
 					// Set options to user-provided jQuery object
-					options = settings.controlOptions.clone();
+					options = settings.controlOptions.clone(false);
 
 					// Loop through each custom items-per-page option
 					for (var i = 0; i < settings.itemsPerPageOptions.length; i++) {
@@ -244,21 +268,16 @@
 						if (typeof limit === 'string' || (typeof limit === 'number' && limit <= P.items.length) ) {
 
 							if ( P.itemsPerPage == limit || ( typeof limit === 'string' && P.itemsPerPage === null ) ) {
-
 								$(option).attr('selected', true);
 							}
-							if ( options.is('select') ) {
-								$(options).append(option);
-							}
-							else {
-								$(options).find('select').append(option);
-							}
+
+							options.findAndSelf('select').append(option);
 						}
 					}
 
 					// Items per page change
 					options.change(function(e) {
-						P.itemsPerPage = $(this).is('select') ? $(this).val() : $(this).find('select').val();
+						P.itemsPerPage = $(this).findAndSelf('select').val();
 						P.itemsPerPage = P.itemsPerPage == '' ? null : parseInt( P.itemsPerPage ); // Set to null if items per page is blank, else convert to integer
 
 						var itemPageFirst = P.pages[ P.currentPage ][0]; // Get the first item on the current page
@@ -283,18 +302,13 @@
 					});
 				}
 
-				var pages = $();
+				var pages = $(); // Empty jQuery object
 
 				// Loop through all of our pages
 				for (var i = 0; i < P.numPages; i++) {
-					var page = settings.controlPage.clone();
-					
-					if ( page.is('a') ) {
-						page.attr('href', '#' + ( i + 1) ).text( i + 1 );
-					}
-					else {
-						page.find('a').attr('href', '#' + ( i + 1) ).text( i + 1 );
-					}
+					var page = settings.controlPage.clone(false);
+
+					page.findAndSelf('a').attr('href', '#' + ( i + 1) ).text( i + 1 );
 
 					pages = pages.add(page);
 				}
@@ -308,11 +322,11 @@
 
 				P.controls = {
 					options: options,
-					first: settings.controlFirst.clone(false, false),
-					prev: settings.controlPrev.clone(false, false),
-					page: pages,
-					next: settings.controlNext.clone(false, false),
-					last: settings.controlLast.clone(false, false)
+					first: settings.controlFirst.clone(false),
+					prev: settings.controlPrev.clone(false),
+					pages: pages,
+					next: settings.controlNext.clone(false),
+					last: settings.controlLast.clone(false)
 				}
 
 				// Go to first page on click
@@ -338,7 +352,7 @@
 				// Replace all controls
 				$(settings.controls)
 					.empty()
-					.append(P.controls.options, P.controls.first, P.controls.prev, P.controls.page, P.controls.next, P.controls.last);
+					.append(P.controls.options, P.controls.first, P.controls.prev, P.controls.pages, P.controls.next, P.controls.last);
 
 				P = settings._buildStyles(P);
 
@@ -378,9 +392,7 @@
 			P = settings._buildPages(P);
 
 			// Build controls
-			P = settings._buildControls(P);			
-
-			//console.log(P);
+			P = settings._buildControls(P);
 		});
 	}
 
