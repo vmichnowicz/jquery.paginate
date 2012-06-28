@@ -47,6 +47,7 @@ However, if you only wanted to paginate the table rows with a class of `odd` the
 $('table tbody').paginate({
 	items: '.odd'
 });
+````
 
 ### controls [ object *jQuery('#pagination_controls')* ]
 
