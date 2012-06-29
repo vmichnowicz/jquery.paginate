@@ -26,6 +26,7 @@
 			controlPrev: $('<a href="javascript:void(0);" class="prev">&lsaquo; Previous</a>'),
 			controlLast: $('<a href="javascript:void(0);" class="last">Last &raquo;</a>'),
 			controlPage: $('<a href="javascript:void(0);" class="page"></a>'),
+			controlPagesVisible: 5,
 			items: null,
 			status: $('#pagination_status'),
 			statusTemplate: $('<p>Viewing items <em class="first_page_item">{0}</em> - <em class="last_page_item">{1}</em> of <em class="total_items">{2}</em></p>'),
@@ -221,12 +222,20 @@
 						P.controls.last.addClass( settings.classDisabled );
 						P.controls.next.addClass( settings.classDisabled );
 					}
+					
+					var down = Math.floor( settings.controlPagesVisible / 2 );
+					var up = Math.max(settings.controlPagesVisible - down - 1, 0);
+					
+					var a = Math.max( P.currentPage - down - ( P.numPages - 1 < P.currentPage + up ? P.currentPage + up + 1 - P.numPages : 0), 0);
+					var b = P.currentPage + up + ( P.currentPage < down ? down - P.currentPage : 0 );
 
 					// Loop through all page controls
 					$(P.controls.pages).each(function(index, page) {
 
 						// Remove current class from all page controls
 						$(page).findAndSelf('a').removeClass( settings.classCurrent );
+						
+						index >= a && index <= b ? $(page).show() : $(page).hide();
 
 						// If this is the current page, add current class to page control
 						if (index === P.currentPage) {
