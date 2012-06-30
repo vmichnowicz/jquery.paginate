@@ -108,7 +108,7 @@ $('ul').paginate({
 
 The jQuery Paginate plugin can be customized in many ways to suit your needs.
 
-### items [ string *null* ]
+### items [ string ]
 
 The `items` property allows you to manually determine what items will be paginated. It works by finding decendents of the initial jQuery object that was passed to the paginate plugin. For example, assume the following HTML:
 
@@ -145,7 +145,7 @@ $('table tbody').paginate({
 });
 ````
 
-### controls [ object *jQuery('#pagination_controls')* ]
+### controls [ object *jQuery* ]
 
 The `controls` options allows you to provide a jQuery object containing the element where you want your pagination controls to appear. By default it looks for an element with an `id` of `pagination_controls`. This can be changed, however. For example, assume you have the following HTML:
 
@@ -161,7 +161,7 @@ $('table tbody').paginate({
 });
 ````
 
-### status [ object *jQuery('#pagination_status')* ]
+### status [ object *jQuery* ]
 
 The `status` options allows you to provide a jQuery object containing the element where you want your pagination status to appear. By default it looks for an element with an `id` of `pagination_status`. This can be changed, however. For example, assume you have the following HTML:
 
@@ -177,32 +177,46 @@ $('table tbody').paginate({
 });
 ````
 
-### controlNext [ object *jQuery('<a href="javascript:void(0);" class="next">Next &rsaquo;</a>')* ]
+### controlNext [ object *jQuery* ]
 
 This object contains a jQuery object representing the link you would like to use for the next operation.
 
-### controlFirst [ object *jQuery('<a href="javascript:void(0);" class="first">&laquo; First</a>')* ]
+### controlFirst [ object *jQuery* ]
 
 This object contains a jQuery object representing the link you would like to use for the first operation.
 
-### controlPrev [ object *jQuery('<a href="javascript:void(0);" class="prev">&lsaquo; Previous</a>')* ]
+### controlPrev [ object *jQuery* ]
 
 This object contains a jQuery object representing the link you would like to use for the previous operation.
 
-### controlLast [ object *jQuery('<a href="javascript:void(0);" class="last">Last &raquo;</a>')* ]
+### controlLast [ object *jQuery* ]
 
 This object contains a jQuery object representing the link you would like to use for the last operation.
 
-### controlPage [ object *jQuery('<a href="javascript:void(0);" class="page"></a>')* ]
+### controlPage [ object *jQuery* ]
 
 This object contains a jQuery object representing the links you would like to use to navigate to each page.
 
-### statusTemplate [ object *jQuery('<p>Viewing items <em class="first_page_item">{0}</em> - <em class="last_page_item">{1}</em> of <em class="total_items">{2}</em></p>')* ]
+### statusTemplate [ object *jQuery* ]
+
+jQuery object containing the HTML element where you would like to display your pagination status.
 
 ### itemsPerPage [ integer *10* ]
 
+Controls the maximun amount of items that will appear on each page.
+
+### controlPagesVisible [ integer *5* ]
+
+Controls the maximum abount to page controls that will display at any given time. This comes in handy if you have mutiple pages and do not want all controls visible at all times.
+
 ### itemsPerPageOptions [ array *array(5, 10, 25, "Show All"])* ]
 
-### controlOptions [ object *jQuery('<span class="items_per_page"><label for="items_per_page">Items per page:</label> <select name="items_per_page" id="items_per_page"></select></span')* ]
+Allow you to set a dropdown letting the user adjust the amount of items shown on each page. Items per page are all integers and any text value will be interperted as an option to view all items.
+
+### controlOptions [ object *jQuery* ]
+
+jQuery object containing the HTML element where you would like your pagination controls to appear.
 
 ### currentPage [ integer *0* ]
+
+Change the default current page.
