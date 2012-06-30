@@ -1,0 +1,105 @@
+html {
+	font: 11px/18px Verdana, "Bitstream Vera Sans", sans-serif;
+	background-color: #fff;
+	color: #999;
+}
+
+header,
+body {
+	margin: 0px;
+	padding: 0px;
+}
+
+header {
+	background-color: #ededed;
+	padding: 20px;
+	position: relative;
+	margin-left: 25%;
+	margin-top: 20px;
+}
+
+h1 {
+	font-size: 18px;
+	margin: 0px;
+	padding: 0px;
+	font-weight: normal;
+	color: #0bb3ea;
+}
+
+header a {
+	float: right;
+	position: absolute;
+	top: 16px;
+	right: 20px;
+}
+
+.button {
+	display: inline-block;
+	font-size: 11px;
+	line-height: 24px;
+	border: 1px solid #a6a6a6;
+	padding: 0px 5px;
+	background-color: #b8b8b8;
+	color: #6f6f6f;
+	text-decoration: none;
+}
+
+.button:hover,
+.button:active {
+	background-color: #a6a6a6;
+	color: #6f6f6f;
+}
+
+table {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+table thead th {
+	background-color: #a7a7a7;
+	color: #555;
+	padding: 5px;
+}
+
+table tbody td {
+	padding: 5px;
+	border-top: 1px solid #efefef;
+	text-align: center;
+}
+
+table tbody tr:hover td {
+	background-color: #0bb3ea;
+	color: #fff;
+}
+
+a {
+	color: #0BB3EA;
+}
+
+.pagination_status {
+	color: #ccc;
+}
+
+.pagination_controls a {
+	margin: 0px 5px;
+	text-decoration: none;
+}
+
+.pagination_controls a.disabled {
+	color: #999;
+	cursor: default;
+}
+
+.pagination_controls a.disabled:hover,
+.pagination_controls a.disabled:focus{
+	text-decoration: none;
+}
+
+.pagination_controls a:hover,
+.pagination_controls a:focus {
+	text-decoration: underline;
+}
+
+.pagination_controls a.current {
+	text-decoration: underline;
+}

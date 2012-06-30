@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html class="no-js">
+<head>
+	<meta charset="utf-8">
+	<title></title>
+	<meta name="description" content="">
+	<meta name="viewport" content="width=device-width">
+	<link rel="stylesheet" href="style.css">
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+	<script type="text/javascript" src="https://raw.github.com/vmichnowicz/jquery.paginate/master/jquery.paginate.js"></script>
+</head>
+<body>
+
+	<div>
+		<header>
+			<h1>jQuery Paginate</h1>
+			<a href="https://github.com/vmichnowicz/jquery.paginate/zipball/master" class="button">Download</a>
+		</header>
+
+		<div id="example_one" style="margin-left: 25%; margin-top: 20px; width: 75%;">
+			<table>
+				<thead>
+					<tr>
+						<th style="width: 25%;">Product ID</th>
+						<th style="width: 50%">Product</th>
+						<th style="width: 25%;">Price</th>
+					</tr>
+				</thead>
+				<tfoot>
+					<tr>
+						<td class="pagination_status"></td>
+						<td colspan="2" class="pagination_controls"></td>
+					</tr>
+				</tfoot>
+				<tbody>
+					<tr>
+						<td>001</td>
+						<td>Toy Car</td>
+						<td>$5.60</td>
+					</tr>
+					<tr>
+						<td>002</td>
+						<td>Awesome Shirt</td>
+						<td>$3.56</td>
+					</tr>
+					<tr>
+						<td>003</td>
+						<td>Radio</td>
+						<td>$9.56</td>
+					</tr>
+					<tr>
+						<td>004</td>
+						<td>Red Pens</td>
+						<td>$7.56</td>
+					</tr>
+					<tr>
+						<td>005</td>
+						<td>Soda</td>
+						<td>$1.25</td>
+					</tr>
+					<tr>
+						<td>006</td>
+						<td>Blank CDs</td>
+						<td>$9.99</td>
+					</tr>
+					<tr>
+						<td>007</td>
+						<td>Ball Mouse</td>
+						<td>$5.98</td>
+					</tr>
+					<tr>
+						<td>008</td>
+						<td>Drink Coasters</td>
+						<td>$7.01</td>
+					</tr>
+					<tr>
+						<td>009</td>
+						<td>A Sock</td>
+						<td>$0.56</td>
+					</tr>
+					<tr>
+						<td>010</td>
+						<td>Piece of Paper</td>
+						<td>$0.05</td>
+					</tr>
+					<tr>
+						<td>011</td>
+						<td>Phone Cover</td>
+						<td>$7.78</td>
+					</tr>
+					<tr>
+						<td>012</td>
+						<td>Slap Watch</td>
+						<td>$9.34</td>
+					</tr>
+					<tr>
+						<td>013</td>
+						<td>Light Bulb</td>
+						<td>$4.45</td>
+					</tr>
+					<tr>
+						<td>014</td>
+						<td>Stamps</td>
+						<td>$5.00</td>
+					</tr>
+					<tr>
+						<td>015</td>
+						<td>Spray Paint</td>
+						<td>$8.57</td>
+					</tr>
+					<tr>
+						<td>016</td>
+						<td>Water Baloons</td>
+						<td>$4.53</td>
+					</tr>
+					<tr>
+						<td>017</td>
+						<td>Tape</td>
+						<td>$8.56</td>
+					</tr>
+					<tr>
+						<td>018</td>
+						<td>Mini Stapler</td>
+						<td>$5.65</td>
+					</tr>
+					<tr>
+						<td>019</td>
+						<td>Mini Staples</td>
+						<td>$4.56</td>
+					</tr>
+					<tr>
+						<td>020</td>
+						<td>Three Pieces of Paper</td>
+						<td>$0.15</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+	<script type="text/javascript">
+		$(document).ready(function() {
+			$('#example_one table tbody').paginate({
+				controls: $('#example_one .pagination_controls'),
+				status: $('#example_one .pagination_status'),
+				itemsPerPage: 5
+			});
+		});
+	</script>
+
+</body>
+</html>
