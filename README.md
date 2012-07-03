@@ -4,6 +4,10 @@
 
 jQuery Paginate is licensed under the MIT License.
 
+## Demo / Example
+
+Access a [live demo](http://www.vmichnowicz.com/examples/paginate/index.html).
+
 ## Introduction
 
 jQuery Paginate is pagination plugin for jQuery 1.4.3 and higher.
@@ -110,7 +114,7 @@ The jQuery Paginate plugin can be customized in many ways to suit your needs.
 
 ### items [ string ]
 
-The `items` property allows you to manually determine what items will be paginated. It works by finding decendents of the initial jQuery object that was passed to the paginate plugin. For example, assume the following HTML:
+The `items` property allows you to manually determine what items will be paginated. It works by finding descendants of the initial jQuery object that was passed to the paginate plugin. For example, assume the following HTML:
 
 ````
 <table>
@@ -207,11 +211,11 @@ Controls the maximun amount of items that will appear on each page.
 
 ### controlPagesVisible [ integer *5* ]
 
-Controls the maximum abount to page controls that will display at any given time. This comes in handy if you have mutiple pages and do not want all controls visible at all times.
+Controls the maximum amount of page controls that will display at any given time. This comes in handy if you have multiple pages and do not want all controls visible at all times.
 
 ### itemsPerPageOptions [ array *array(5, 10, 25, "Show All"])* ]
 
-Allow you to set a dropdown letting the user adjust the amount of items shown on each page. Items per page are all integers and any text value will be interperted as an option to view all items.
+Allow you to set a dropdown letting the user adjust the amount of items shown on each page. Items per page are all integers and any text value will be interpreted as an option to view all items.
 
 ### controlOptions [ object *jQuery* ]
 
